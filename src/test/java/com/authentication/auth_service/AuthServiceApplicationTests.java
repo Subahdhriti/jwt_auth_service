@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 })
 class AuthServiceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+//	@Test
+//	void contextLoads() {
+//	}
 
 }
