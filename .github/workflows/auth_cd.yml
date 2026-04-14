@@ -1,0 +1,30 @@
+name: Auth CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Docker image tag (commit SHA)'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS context
+        uses: azure/aks-set-context@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster-name: sb-aks-01
+          resource-group: sb-rg-01
+
+      - name: Deploy to AKS
+        run: |
+          kubectl set image deployment/auth-service \
+          auth-service=${{ secrets.ACR_NAME }}.azurecr.io/auth-service:${{ github.event.inputs.image_tag }}
